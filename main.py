@@ -110,7 +110,7 @@ def calculatePercentage(resultData):
     for i in range(0, len(resultData)):
         cor += resultData[i][-1]
     # Calculate percentage and return.
-    return (cor / len(resultData)) * 100.0
+    return [(cor / len(resultData)) * 100.0, cor, len(resultData)]
 
 
 # MAIN
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     # Specify the file to read from. Must be csv. If fileRead is blank, then the user can enter the csv name, provided it is located at the same location as this .py file.
     fileRead = "WB_frequencydictionary_jones"
     fileReadShort = "fd_jones"
-    sheetRead = "Nouns"
+    sheetRead = "Verbs"
     writeLoc = "DATA/"
     if fileRead == "":
         fileRead = input("Specify name of file to read (without extension): ")
@@ -177,8 +177,14 @@ if __name__ == "__main__":
     # Create write location if it doesn't exist.
     if not os.path.exists(writeLoc):
         os.makedirs(writeLoc)
+        
+    # Calculate percentage.
+    testScore, corAns, totAns = calculatePercentage(resultData)
+    
+    # Print result.
+    print("\nScore: " + str(testScore) + "% [" + str(corAns) + " / " + str(totAns) + "]")
 
     # Write local data.
     writeLocalXlsx(writeLoc + timestamp, timestamp, resultData)
     # Calculate percentage and write to global results.
-    writeGlobalXlsx(writeLoc + 'GlobalResults.xlsx', sheetName, [timestamp, calculatePercentage(resultData)])
+    writeGlobalXlsx(writeLoc + 'GlobalResults.xlsx', sheetName, [timestamp, testScore])
