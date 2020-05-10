@@ -16,7 +16,7 @@ def game(mode, data):
         # The 'question' is always the German word, which is in the 1st column (idx 0).
         question = data[i][0]
         # Get the user's answer, using input.
-        usrAns = input("[" + str(i) + " of " + str(len(data)) + "] " + colored(question, "yellow") + ": ")
+        usrAns = input("[" + str(i + 1) + " of " + str(len(data)) + "] " + colored(question, "yellow") + ": ")
         # Define the real/correct answer, which is defined by the column specified in 'mode'
         realAns = data[i][mode]
         # If the answer typed is 'exit!' that's the break command to exit before finishing the list of questions.
@@ -26,12 +26,12 @@ def game(mode, data):
             # If the answer is incorrect, print in red. Also print the correct answer in yellow.
             print(colored("Incorrect. ", "red") + colored("Correct answer is \'", "yellow") + colored(realAns, "cyan") + colored("\'.", "yellow"))
             # Append the result in the result array.
-            resultData.append([str(i), str(len(data)), question.lower(), realAns.lower(), usrAns.lower(), 0])
+            resultData.append([str(i + 1), str(len(data)), question.lower(), realAns.lower(), usrAns.lower(), 0])
         elif usrAns.lower() in realAns.lower():
             # If the answer is correct, print in green.
             print(colored("Correct. ", "green") + colored("Full answer is \'", "yellow") + colored(realAns, "cyan") + colored("\'.", "yellow"))
             # Append the result in the result array.
-            resultData.append([str(i), str(len(data)), question.lower(), realAns.lower(), usrAns.lower(), 1])
+            resultData.append([str(i + 1), str(len(data)), question.lower(), realAns.lower(), usrAns.lower(), 1])
 
     # Return the data results once completed/quit.
     return resultData
@@ -169,6 +169,10 @@ if __name__ == "__main__":
 
     # Initiate game.
     resultData = game(int(gameMode), data)
+
+    # If the user exited before answering any questions, exit here.
+    if not resultData:
+        exit(0)
 
     # Create write location if it doesn't exist.
     if not os.path.exists(writeLoc):
